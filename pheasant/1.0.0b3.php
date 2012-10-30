@@ -49,8 +49,6 @@ class Book extends \Pheasant\DomainObject
 
 class Pheasant_1_0_0b3_Benchmark extends BaseBenchmark
 {
-	public $authors;
-
 	public function setUp()
 	{
 		Pheasant::setup(sprintf(
@@ -59,28 +57,24 @@ class Pheasant_1_0_0b3_Benchmark extends BaseBenchmark
 		));
 	}
 
-	public function benchAuthorInsert($id, $first_name, $last_name, $email)
+	public function benchInsert($id, $author, $book)
 	{
-		$author = new Author(array(
-			'id' => $id,
-			'first_name' => $first_name,
-			'last_name' => $last_name,
-			'email' => $email
+		$a = new Author(array(
+			'id' => $author->id,
+			'first_name' => $author->first_name,
+			'last_name' => $author->last_name,
+			'email' => $author->email
 		));
-		$author->save();
-		$this->authors[$id] = $author;
-	}
+		$a->save();
 
-	public function benchBookInsert($id, $title, $author_id, $isbn, $price)
-	{
-		$book = new Book(array(
-			'id' => $id,
-			'title' => $title,
-			'isbn' => $isbn,
-			'price' => $price,
-			'author_id' => $author_id
+		$b = new Book(array(
+			'id' => $book->id,
+			'title' => $book->title,
+			'isbn' => $book->isbn,
+			'price' => $book->price,
+			'author_id' => $a->id
 		));
-		$book->save();
+		$b->save();
 	}
 }
 

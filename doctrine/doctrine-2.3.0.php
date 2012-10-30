@@ -41,37 +41,28 @@ class Doctrine_2_3_0_Benchmark extends BaseBenchmark
 		require_once $proxyDir . '/__CG__ProxiesBook.php';
 	}
 
-	public function benchAuthorInsert($id, $first_name, $last_name, $email)
+	public function benchInsert($id, $author, $book)
 	{
 		$this->em->beginTransaction();
 
-		$author = new \Proxies\Author();
-		$author->id = $id;
-		$author->first_name = $first_name;
-		$author->last_name = $last_name;
-		$author->email = $email;
+		$a = new \Proxies\Author();
+		$a->id = $author->id;
+		$a->first_name = $author->first_name;
+		$a->last_name = $author->last_name;
+		$a->email = $author->email;
 
-		$this->em->persist($author);
-		$this->authors[$id]= $author;
+		$b = new \Proxies\Book();
+		$b->id = $book->id;
+		$b->title = $book->title;
+		$b->author = $a;
+		$b->isbn = $book->isbn;
+		$b->price = $book->price;
 
-		$this->em->flush();
-		$this->em->commit();
-	}
-
-	public function benchBookInsert($id, $title, $author_id, $isbn, $price)
-	{
-		$this->em->beginTransaction();
-
-		$book = new \Proxies\Book();
-		$book->id = $id;
-		$book->title = $title;
-		$book->author = $this->authors[$id];
-		$book->isbn = $isbn;
-		$book->price = $price;
-
-		$this->em->persist($book);
+		$this->em->persist($a);
+		$this->em->persist($b);
 
 		$this->em->flush();
 		$this->em->commit();
+		$this->em->clear();
 	}
 }

@@ -12,7 +12,7 @@ class Author
     /** @Column(length=255) */
     public $last_name;
     /** @Column(length=255, nullable=true) */
-    public $email;
+		public $email;
     /** @OneToMany(targetEntity="Book", mappedBy="author") */
     public $books;
 }

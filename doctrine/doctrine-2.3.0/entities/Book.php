@@ -13,6 +13,6 @@ class Book
     public $isbn;
     /** @Column(type="decimal") */
     public $price;
-    /** @ManyToOne(targetEntity="Author") cascade={"persist"} */
+    /** @ManyToOne(targetEntity="Author") */
     public $author;
 }

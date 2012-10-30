@@ -1,6 +1,6 @@
 <?php
 
-printf("%-30sAUTHOR_INSERT\tBOOK_INSERT\n", "Class");
+printf("%-30s%-30s\n", "Class", "INSERT");
 
 foreach(glob('*/*.php') as $path)
 {

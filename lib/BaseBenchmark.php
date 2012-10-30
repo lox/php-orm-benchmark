@@ -74,31 +74,34 @@ abstract class BaseBenchmark
 
 		printf("%-30s", get_class($this));
 
-		// Benchmark #1 Author Insert
+		// Benchmark #1 Insert
 		// --------------------------
 
 		$start = microtime(true);
 
 		for($i=1; $i<=self::ITERATIONS; $i++)
-			$this->benchAuthorInsert($i, 'John'.$i, 'Doe'.$i, "johndoe{$i}@gmail.com");
+		{
+			$author = (object) array(
+				'id' => $i,
+				'first_name' => 'John'.$i,
+				'last_name' => 'Doe'.$i,
+				'email' => "johndoe{$i}@gmail.com",
+			);
 
-		if($this->validateChecksum(NULL, '2931e7d371cd97310c4951dec972b95a'))
-			printf("%.4fms", (microtime(true)-$start) * 1000);
-		else
-			printf("BAD MD5");
+			$book = (object) array(
+				'id' => $i,
+				'title' => 'Book '.$i,
+				'isbn' => '1234',
+				'price' => 19.95
+			);
 
-		// Benchmark #2 Book Insert
-		// -----------------------
-
-		$start = microtime(true);
-
-		for($i=1; $i<=self::ITERATIONS; $i++)
-			$this->benchBookInsert($i, 'Book '.$i, $i, '1234', 19.95);
+			$this->benchInsert($i, $author, $book);
+		}
 
 		if($this->validateChecksum('fe27e58fa3232b4157381bb4818c6184', '2931e7d371cd97310c4951dec972b95a'))
-			printf("\t%.4fms", (microtime(true)-$start) * 1000);
+			printf("%-30s", number_format((microtime(true)-$start) * 1000, 4));
 		else
-			printf("\tBAD MD5");
+			printf("BAD MD5");
 
 		printf("\n");
 	}
@@ -107,8 +110,7 @@ abstract class BaseBenchmark
 	{
 	}
 
-	public abstract function benchAuthorInsert($id, $first_name, $last_name, $email);
-	public abstract function benchBookInsert($id, $title, $author_id, $isbn, $price);
+	public abstract function benchInsert($id, $author, $book);
 }
 
 // ------------------------------

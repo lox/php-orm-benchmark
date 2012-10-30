@@ -10,11 +10,9 @@ roughly the same tests, but executed against a MySQL instance.
 What are the tests?
 -------------------
 
-* Author Insert
-A row is inserted into the `author` table with a value for `first_name` and `last_name`.
-
-* Book Insert
-A row is inserted into the `book` table with a value for `title`, `isbn`, `price` and `author_id`.
+* Author & Book Insert
+A row is inserted into the `author` table with a value for `first_name` and `last_name`.  A row is
+inserted into the `book` table with a value for `title`, `isbn`, `price` and `author_id`.
 
 * Author PK Search
 A single author is fetched by `author.id`

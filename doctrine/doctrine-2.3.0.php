@@ -33,9 +33,9 @@ class Doctrine_2_3_0_Benchmark extends BaseBenchmark
 		$this->em->clear();
 
 		// generate proxies
-    $proxyFactory = $em->getProxyFactory();
-    $metadatas = $em->getMetadataFactory()->getAllMetadata();
-    $proxyFactory->generateProxyClasses($metadatas, $proxyDir);
+		$proxyFactory = $em->getProxyFactory();
+		$metadatas = $em->getMetadataFactory()->getAllMetadata();
+		$proxyFactory->generateProxyClasses($metadatas, $proxyDir);
 
 		require_once $proxyDir . '/__CG__ProxiesAuthor.php';
 		require_once $proxyDir . '/__CG__ProxiesBook.php';

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proxies;
+namespace Bookstore;
 
 /** @Entity */
 class Book

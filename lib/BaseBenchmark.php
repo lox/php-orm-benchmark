@@ -72,7 +72,7 @@ abstract class BaseBenchmark
 		$this->createTables();
 		$this->setUp();
 
-		printf("%-30s", get_class($this));
+		printf("%-30s", preg_replace('/_?Benchmark$/','',get_class($this)));
 
 		// Benchmark #1 Insert
 		// --------------------------

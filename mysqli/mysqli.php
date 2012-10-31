@@ -9,7 +9,7 @@ class Mysqli_Benchmark extends BaseBenchmark
 		$this->mysqli = new mysqli($this->host, $this->user, $this->password, $this->database);
 	}
 
-	public function benchInsert($id, $author, $book)
+	public function benchInsert($author, $book)
 	{
 		$sql = sprintf("INSERT INTO author VALUES (%d, '%s', '%s', '%s')",
 		 	$author->id, $author->first_name, $author->last_name, $author->email);
@@ -22,5 +22,11 @@ class Mysqli_Benchmark extends BaseBenchmark
 
 		if(!$this->mysqli->query($sql))
 			throw new Exception($this->mysqli->error);
+	}
+
+	public function benchPkSearch($id)
+	{
+		$book = (object) $this->mysqli->query("SELECT * FROM book WHERE id={$id} LIMIT 1")->fetch_assoc();
+		$title = $book->title;
 	}
 }

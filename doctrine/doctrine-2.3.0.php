@@ -41,7 +41,7 @@ class Doctrine_2_3_0_Benchmark extends BaseBenchmark
 		require_once $proxyDir . '/__CG__BookstoreBook.php';
 	}
 
-	public function benchInsert($id, $author, $book)
+	public function benchInsert($author, $book)
 	{
 		$this->em->beginTransaction();
 
@@ -63,6 +63,12 @@ class Doctrine_2_3_0_Benchmark extends BaseBenchmark
 
 		$this->em->flush();
 		$this->em->commit();
+		$this->em->clear();
+	}
+
+	public function benchPkSearch($id)
+	{
+		$author = $this->em->find('\Bookstore\Author', $id);
 		$this->em->clear();
 	}
 }

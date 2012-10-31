@@ -13,21 +13,24 @@ class Pdo_Benchmark extends BaseBenchmark
 		);
 	}
 
-	public function benchInsert($id, $author, $book)
+	public function benchInsert($author, $book)
 	{
-		$stmt1 = $this->pdo->prepare('INSERT INTO author VALUES (?,?,?,?)');
-		$stmt1->bindValue(1, $author->id, PDO::PARAM_INT);
-		$stmt1->bindValue(2, $author->first_name, PDO::PARAM_STR);
-		$stmt1->bindValue(3, $author->last_name, PDO::PARAM_STR);
-		$stmt1->bindValue(4, $author->email, PDO::PARAM_STR);
-		$stmt1->execute();
+		$sql = sprintf("INSERT INTO author VALUES (%d, '%s', '%s', '%s')",
+		 	$author->id, $author->first_name, $author->last_name, $author->email);
 
-		$stmt2 = $this->pdo->prepare('INSERT INTO book VALUES (?,?,?,?,?)');
-		$stmt2->bindValue(1, $book->id, PDO::PARAM_INT);
-		$stmt2->bindValue(2, $book->title, PDO::PARAM_STR);
-		$stmt2->bindValue(3, $book->isbn, PDO::PARAM_STR);
-		$stmt2->bindValue(4, $book->price, PDO::PARAM_STR);
-		$stmt2->bindValue(5, $author->id, PDO::PARAM_INT);
-		$stmt2->execute();
+		$this->pdo->exec($sql);
+
+		$sql = sprintf("INSERT INTO book VALUES (%d, '%s', '%s', %f, %d)",
+		 	$book->id, $book->title, $book->isbn, $book->price, $author->id);
+
+		$this->pdo->exec($sql);
+	}
+
+	public function benchPkSearch($id)
+	{
+		$book = (object) $this->pdo->query("SELECT * FROM book WHERE id={$id} LIMIT 1")->fetch();
+		$title = $book->title;
 	}
 }
+
+

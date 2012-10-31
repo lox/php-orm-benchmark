@@ -1,6 +1,6 @@
 <?php
 
-printf("%-30s%-30s\n", "Class", "INSERT");
+printf("%-30s%-15s%-15s\n", "Class", "INSERT", "PK_SEARCH");
 
 foreach(glob('*/*.php') as $path)
 {

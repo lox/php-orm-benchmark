@@ -95,11 +95,26 @@ abstract class BaseBenchmark
 				'price' => 19.95
 			);
 
-			$this->benchInsert($i, $author, $book);
+			$this->benchInsert($author, $book);
 		}
 
 		if($this->validateChecksum('fe27e58fa3232b4157381bb4818c6184', '2931e7d371cd97310c4951dec972b95a'))
-			printf("%-30s", number_format((microtime(true)-$start) * 1000, 4));
+			printf("%-15s", number_format((microtime(true)-$start) * 1000, 4).'ms' );
+		else
+			printf("BAD MD5");
+
+		// Benchmark #3 Author PK search
+		// -----------------------------
+
+		$start = microtime(true);
+
+		for($i=1; $i<=self::ITERATIONS; $i++)
+		{
+			$this->benchPkSearch($i);
+		}
+
+		if($this->validateChecksum('fe27e58fa3232b4157381bb4818c6184', '2931e7d371cd97310c4951dec972b95a'))
+			printf("%-15s", number_format((microtime(true)-$start) * 1000, 4).'ms' );
 		else
 			printf("BAD MD5");
 
@@ -110,7 +125,9 @@ abstract class BaseBenchmark
 	{
 	}
 
-	public abstract function benchInsert($id, $author, $book);
+	public abstract function benchInsert($author, $book);
+	public abstract function benchPkSearch($id);
+
 }
 
 // ------------------------------

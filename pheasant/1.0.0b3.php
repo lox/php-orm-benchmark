@@ -57,7 +57,7 @@ class Pheasant_1_0_0b3_Benchmark extends BaseBenchmark
 		));
 	}
 
-	public function benchInsert($id, $author, $book)
+	public function benchInsert($author, $book)
 	{
 		$a = new Author(array(
 			'id' => $author->id,
@@ -76,8 +76,10 @@ class Pheasant_1_0_0b3_Benchmark extends BaseBenchmark
 		));
 		$b->save();
 	}
+
+	public function benchPkSearch($id)
+	{
+		$book = Book::oneById($id);
+		$title = $book->title;
+	}
 }
-
-
-
-

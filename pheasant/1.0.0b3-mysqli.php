@@ -29,8 +29,38 @@ class Pheasant_1_0_0b3_Mysqli_Benchmark extends BaseBenchmark
 	public function benchPkSearch($id)
 	{
 		$table = $this->conn->table('book');
-		$book = (object) $table->query()->where('id=?', $id)->execute()->row();
+		$book = (object) $table->query()->where('id=?', $id)->limit(1)->execute()->row();
 		$title = $book->title;
+	}
+
+	public function benchEnumerate()
+	{
+		$table = $this->conn->table('book');
+		foreach($table->query()->limit(10)->execute() as $row)
+		{
+			$book = (object) $row;
+			$title = $book->title;
+		}
+	}
+
+	public function benchSearch()
+	{
+		for($i=1; $i<=10; $i++)
+		{
+			$sql = 'SELECT count(a.id) AS num FROM author a WHERE a.id > ? OR (a.first_name = ? OR a.last_name = ?)';
+			$count = $this->conn->execute($sql, array($i, "John{$i}", "Doe$i"))->scalar();
+		}
+	}
+
+	public function benchNPlus1()
+	{
+		$book = $this->conn->table('book');
+		$author = $this->conn->table('author');
+
+		foreach($book->query()->limit(10)->execute() as $row)
+		{
+			$a = $author->query()->where('id=?', $row['author_id'])->execute()->row();
+		}
 	}
 }
 

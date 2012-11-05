@@ -82,4 +82,29 @@ class Pheasant_1_0_0b3_Benchmark extends BaseBenchmark
 		$book = Book::oneById($id);
 		$title = $book->title;
 	}
+
+	public function benchEnumerate()
+	{
+		foreach(Book::find() as $idx=>$book)
+		{
+			$title = $book->title;
+			if($idx >= 9) break; // no limit support on collections :(
+		}
+	}
+
+	public function benchSearch()
+	{
+		for($i=1; $i<=10; $i++)
+			$count = Author::find("id > ? OR (first_name = 'John{$i}' OR last_name = 'Doe{$i}')", $i)->count();
+	}
+
+
+	public function benchNPlus1()
+	{
+		foreach(Book::find() as $idx=>$book)
+		{
+			$author = $book->Author;
+			if($idx >= 9) break; // no limit support on collections :(
+		}
+	}
 }

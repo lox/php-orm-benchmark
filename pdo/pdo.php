@@ -31,6 +31,35 @@ class Pdo_Benchmark extends BaseBenchmark
 		$book = (object) $this->pdo->query("SELECT * FROM book WHERE id={$id} LIMIT 1")->fetch();
 		$title = $book->title;
 	}
+
+	public function benchEnumerate()
+	{
+		foreach($this->pdo->query("SELECT * FROM book LIMIT 10") as $row)
+		{
+			$book = (object) $row;
+			$title = $book->title;
+		}
+	}
+
+	public function benchSearch()
+	{
+		for($i=1; $i<=10; $i++)
+		{
+			$sql = "SELECT count(a.id) AS num FROM author a WHERE a.id > {$i} OR (a.first_name = 'John{$i}' OR a.last_name = 'Doe{$i}')";
+			$result = $this->pdo->query($sql)->fetch();
+			$count = $result['num'];
+		}
+	}
+
+	public function benchNPlus1()
+	{
+		$result = $this->pdo->query("SELECT * FROM book LIMIT 10");
+
+		while($row = $result->fetch())
+		{
+			$author = $this->pdo->query("SELECT * FROM author WHERE id={$row['author_id']} LIMIT 1")->fetch();
+		}
+	}
 }
 
 

@@ -71,4 +71,40 @@ class Doctrine_2_3_0_Benchmark extends BaseBenchmark
 		$author = $this->em->find('\Bookstore\Author', $id);
 		$this->em->clear();
 	}
+
+	public function benchEnumerate()
+	{
+		$books = $this->em->createQuery('SELECT b FROM \Bookstore\Book b')->setMaxResults(10)->getResult();
+		foreach ($books as $book) {
+			$title = $book->title;
+		}
+		$this->em->clear();
+	}
+
+	public function benchSearch()
+	{
+		for($i=1; $i<=10; $i++)
+		{
+			$dql = 'SELECT count(a.id) AS num FROM \Bookstore\Author a WHERE a.id > ?1 OR (a.first_name = ?2 OR a.last_name = ?3)';
+			$count = $this->em
+				->createQuery($dql)
+				->setParameter(1, $i)
+				->setParameter(2, 'John'.$i)
+				->setParameter(3, 'Doe'.$i)
+				->setMaxResults(1)
+				->getSingleScalarResult()
+				;
+		}
+		$this->em->clear();
+	}
+
+	public function benchNPlus1()
+	{
+		$books = $this->em->createQuery('SELECT b FROM \Bookstore\Book b')->setMaxResults(10)->getResult();
+		foreach ($books as $book) {
+			$author = $book->author;
+			$firstname = $author->first_name;
+		}
+		$this->em->clear();
+	}
 }

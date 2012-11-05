@@ -98,12 +98,15 @@ abstract class BaseBenchmark
 			$this->benchInsert($author, $book);
 		}
 
+		$delta = (microtime(true)-$start) * 1000;
+		$avg = $delta / self::ITERATIONS;
+
 		if($this->validateChecksum('fe27e58fa3232b4157381bb4818c6184', '2931e7d371cd97310c4951dec972b95a'))
-			printf("%-15s", number_format((microtime(true)-$start) * 1000, 4).'ms' );
+			printf("%-15s", number_format($avg, 2).'ms' );
 		else
 			printf("BAD MD5");
 
-		// Benchmark #3 Author PK search
+		// Benchmark #2 Book PK search
 		// -----------------------------
 
 		$start = microtime(true);
@@ -113,21 +116,61 @@ abstract class BaseBenchmark
 			$this->benchPkSearch($i);
 		}
 
-		if($this->validateChecksum('fe27e58fa3232b4157381bb4818c6184', '2931e7d371cd97310c4951dec972b95a'))
-			printf("%-15s", number_format((microtime(true)-$start) * 1000, 4).'ms' );
-		else
-			printf("BAD MD5");
+		$delta = (microtime(true)-$start) * 1000;
+		$avg = $delta / self::ITERATIONS;
 
+		printf("%-15s", number_format($avg, 2).'ms' );
+
+		// Benchmark #3 Enumerate All Authors
+		// -----------------------------
+
+		$start = microtime(true);
+
+		for($i=1; $i<=self::ITERATIONS; $i++)
+		{
+			$this->benchEnumerate();
+		}
+
+		$delta = (microtime(true)-$start) * 1000;
+		$avg = $delta / self::ITERATIONS;
+
+		printf("%-15s", number_format($avg, 4).'ms' );
+
+		// Benchmark #4
+		// -----------------------------
+
+		$start = microtime(true);
+
+		for($i=1; $i<=self::ITERATIONS; $i++)
+		{
+			$this->benchSearch();
+		}
+
+		$delta = (microtime(true)-$start) * 1000;
+		$avg = $delta / self::ITERATIONS;
+
+		printf("%-15s", number_format($avg, 4).'ms' );
+
+		// Benchmark #5
+		// -----------------------------
+
+		$start = microtime(true);
+
+		for($i=1; $i<=self::ITERATIONS; $i++)
+		{
+			$this->benchNPlus1();
+		}
+
+		$delta = (microtime(true)-$start) * 1000;
+		$avg = $delta / self::ITERATIONS;
+
+		printf("%-15s", number_format($avg, 4).'ms' );
 		printf("\n");
 	}
 
 	public function setUp()
 	{
 	}
-
-	public abstract function benchInsert($author, $book);
-	public abstract function benchPkSearch($id);
-
 }
 
 // ------------------------------

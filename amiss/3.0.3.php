@@ -73,19 +73,6 @@ class Amiss_3_0_3_Benchmark extends BaseBenchmark
 			';dbname='.$this->database , $this->user, $this->password);
 
 		$this->manager = new Amiss\Sql\Manager($connector, $mapper);
-
-		// the below is a horrible hack :(
-		try
-		{
-			$tableBuilder = new Amiss\Sql\TableBuilder($this->manager, 'Author');
-			$tableBuilder->createTable();
-
-			$tableBuilder = new Amiss\Sql\TableBuilder($this->manager, 'Books');
-			$tableBuilder->createTable();
-		}
-		catch(Exception $e)
-		{
-		}
 	}
 
 	public function benchInsert($author, $book)

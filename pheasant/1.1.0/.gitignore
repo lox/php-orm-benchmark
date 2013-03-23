@@ -1,0 +1,5 @@
+.pear.tmp
+.DS_Store
+vendor
+tests/coverage
+docs/_build

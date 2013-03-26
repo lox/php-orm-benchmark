@@ -122,9 +122,10 @@ class Amiss_3_0_3_Benchmark extends BaseBenchmark
 
 	public function benchNPlus1()
 	{
-		foreach($this->manager->getList('Book', array('limit'=>10)) as $idx=>$book)
-		{
-			$author = $this->manager->getRelated($book, 'author');
+		$books = $this->manager->getList('Book', array('limit'=>10));
+		$this->manager->assignRelated($books, 'author');
+		foreach ($books as $book) {
+			$author = $book->author;
 		}
 	}
 }
